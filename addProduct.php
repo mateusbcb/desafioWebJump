@@ -50,7 +50,11 @@
   <main class="content">
     <h1 class="title new-item">New Product</h1>
     
-    <form action="routes/adicionarProduto.php" method="POST" multiple>
+    <form action="routes/adicionarProduto.php" method="POST" enctype="multipart/form-data">
+      <div class="input-field">
+        <label for="image" class="label">Imagem</label>
+        <input type="file" id="image" name="image" class="input-text" />
+      </div>
       <div class="input-field">
         <label for="sku" class="label">Product SKU</label>
         <input type="text" id="sku" name="sku" class="input-text" /> 
@@ -69,7 +73,7 @@
       </div>
       <div class="input-field">
         <label for="category" class="label">Categories</label>
-        <select multiple id="category" name="categorias[]" class="input-text">
+        <select multiple required id="category" name="categorias[]" class="input-text">
           <?php
             foreach ($categoriasArr as $key => $categoria) {
               echo "<option value=".$categoria['nome'].">".$categoria['nome']."</option>";

@@ -6,7 +6,7 @@
     include_once "../app/database/Conexao.php";
     
     use App\Controllers\ProdutosController;
-
+    
     $produtos = new ProdutosController();
 
     $produto = $produtos->insert();

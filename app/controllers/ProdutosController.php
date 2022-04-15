@@ -25,12 +25,62 @@
             $categorias     = json_encode($_REQUEST['categorias']);
             $descricao      = $_REQUEST['descricao'];
 
-            $sql = "INSERT INTO produtos (sku, nome, preco, quantidade, categorias, descricao)
-                    VALUE (:sku, :nome, :preco, :quantidade, :categorias, :descricao)";
+            // upload de imagem
+            $target_dir = "../assets/images/product/";
+            $target_file = $target_dir . $sku . ".png";
+            $uploadOk = 1;
+            $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+            
+            // Verifique se o arquivo de imagem é uma imagem real ou uma imagem falsa
+            if(isset($_POST["submit"])) {
+                $check = getimagesize($_FILES["image"]["tmp_name"]);
+            if($check !== false) {
+                echo "O arquivo é uma imagem - " . $check["mime"] . ".";
+                $uploadOk = 1;
+            } else {
+                echo "O arquivo não é uma imagem.";
+                $uploadOk = 0;
+            }
+            }
+
+            // Verifique se o arquivo já existe
+            if (file_exists($target_file)) {
+                echo "Desculpe, o arquivo já existe.";
+            $uploadOk = 0;
+            }
+
+            // Verifique o tamanho do arquivo
+            if ($_FILES["image"]["size"] > 500000) {
+                echo "Desculpe seu arquivo é muito grabde.";
+            $uploadOk = 0;
+            }
+
+            // Permitir determinados formatos de arquivo
+            if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+            && $imageFileType != "gif" && $imageFileType != "webp" ) {
+                echo "Desculpe, apenas arquivos JPG, JPEG, PNG, GIF e webp são permitidos.";
+                $uploadOk = 0;
+            }
+
+            // Verifique se $uploadOk está definido como 0 por um erro
+            if ($uploadOk == 0) {
+                echo "Desculpe, seu arquivo não foi carregado.";
+            // se estiver tudo ok, tente fazer o upload do arquivo
+            } else {
+                if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                    echo "O arquivo ". htmlspecialchars( basename( $_FILES["image"]["name"])). " foi carregado com sucesso.";
+                } else {
+                    echo "Desculpe, ocorreu um erro ao enviar seu arquivo.";
+                }
+            }
+
+            $sql = "INSERT INTO produtos (sku, nome, imagem, preco, quantidade, categorias, descricao)
+                    VALUE (:sku, :nome, :imagem, :preco, :quantidade, :categorias, :descricao)";
             
             $stmt  = $pdo->prepare( $sql );
             $stmt->bindParam( ':sku', $sku );
             $stmt->bindParam( ':nome', $nome );
+            $stmt->bindParam( ':imagem', $target_file );
             $stmt->bindParam( ':preco', $preco );
             $stmt->bindParam( ':quantidade', $quantidade );
             $stmt->bindParam( ':categorias', $categorias );
