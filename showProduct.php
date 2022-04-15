@@ -74,7 +74,7 @@
     <div class="container">
       <div class="container-left">
         <div class="left-content">
-          <img src="assets/images/product/<?php echo $produtoArr[0]['sku']; ?>.png" alt="">
+          <img src="assets/images/product/<?php echo $produtoArr[0]['sku']; ?>.png" alt="<?php echo $produtoArr[0]['nome']; ?>" style="max-width: 90%;">
         </div>
         <div class="right-content">
           <div class="card mt-4">
