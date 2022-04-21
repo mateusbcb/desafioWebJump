@@ -3,15 +3,15 @@
   
   use App\Controllers\ProdutosController;
 
-  $produtos = new ProdutosController();
+  $serach = new ProdutosController();
 
-  $produtosArr = $produtos->select();
+  $results = $serach->search($_GET['busca']);
 ?>
 
 <!doctype html>
 <html>
 <head>
-  <title>Webjump | Backend Test | Dashboard</title>
+  <title>Webjump | Backend Test | Search</title>
   <meta charset="utf-8">
 
 <link  rel="stylesheet" type="text/css"  media="all" href="assets/css/style.css" />
@@ -48,24 +48,24 @@
 <!-- Header -->
   <!-- Main Content -->
   <main class="content">
-    <div>
+  <div>
       <form action="search.php" method="get">
         <div class="input-field">
           <label for="search" class="label">Busca</label>
-          <input type="text" name="busca" id="search" value="" class="input-text">
+          <input type="text" name="busca" id="search" value="<?PHP echo $_GET['busca']; ?>" class="input-text">
           <button type="submit" class="btn btn-primary">Pesquisar</button>
         </div>
       </form>
     </div>
     <div class="header-list-page">
-      <h1 class="title">Dashboard</h1>
+      <h1 class="title">Search</h1>
     </div>
     <div class="infor">
-      You have <?PHP echo count($produtosArr); ?> products added on this store: <a href="addProduct.php" class="btn-action">Add new Product</a>
+      Sua busca encontrou <?PHP echo count($results); ?> resultados.
     </div>
     <ul class="product-list">
       <?PHP
-        foreach ($produtosArr as $key => $produto) {
+        foreach ($results as $key => $produto) {
           
           echo "
             <li>

@@ -5,6 +5,7 @@
     include_once "app/database/Conexao.php";
 
     use App\Database\Conexao;
+    use PDO;
 
     class ProdutosController 
     {
@@ -162,6 +163,42 @@
             }
 
             return $result;
+        }
+
+        public function search($busca)
+        {
+            $pdo = $this->db->db();
+
+            $sql = "SELECT * FROM produtos WHERE nome LIKE :nome";
+
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(
+                [
+                    ':nome' => '%' . $busca . '%'
+                ]
+            );
+
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $results;
+
+            // $valores = [];
+
+            // $sql = "SELECT * FROM produtos WHERE nome LIKE \'%\'\"pro\"\'%\';";
+
+            // $stmt  = $pdo->prepare( $sql );
+            
+            // $results = $stmt->execute([
+            //     ':nome' => "'%'$busca'%'"
+            // ]);
+            // return $results;
+            
+            // foreach ($pdo->query($sql) as $row) {
+                
+            //     array_push($valores, $row);
+            // }
+            
+            // return $valores;
         }
     }
 
