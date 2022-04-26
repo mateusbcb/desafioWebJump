@@ -7,12 +7,12 @@
 
     use App\Controllers\ProdutosController;
 
+    $produtos = new ProdutosController();
+    
     $id = $_POST['id'];
 
-    $produtos = new ProdutosController();
-
     $produto = $produtos->delete($id);
-
+    
     if ($produto) {
         header('Location: http://localhost/desafioWebJump/products.php');
     } else {

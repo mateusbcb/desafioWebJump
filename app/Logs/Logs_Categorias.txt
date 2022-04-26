@@ -1,0 +1,6 @@
+26-04-2022 02:46:56 - 200 - Categorias selecionadas - Categorias - localhost - http://localhost/desafioWebJump/categories.php 
+26-04-2022 02:47:13 - 201 - Categoria inserida com sucesso - Categorias - localhost - http://localhost/desafioWebJump/addCategory.php 
+26-04-2022 02:47:13 - 200 - Categorias selecionadas - Categorias - localhost - http://localhost/desafioWebJump/addCategory.php 
+26-04-2022 02:47:17 - 201 - Categoria removida com sucesso - Categorias - localhost - http://localhost/desafioWebJump/categories.php 
+26-04-2022 02:47:17 - 200 - Categorias selecionadas - Categorias - localhost - http://localhost/desafioWebJump/categories.php 
+26-04-2022 02:47:51 - 200 - Categorias selecionadas - Categorias - localhost - http://localhost/desafioWebJump/categories.php 

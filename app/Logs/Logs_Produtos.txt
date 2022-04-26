@@ -1,0 +1,8 @@
+26-04-2022 02:31:29 - 201 - Produtos silecionados com sucesso - Produtos - localhost - http://localhost/desafioWebJump/categories.php 
+26-04-2022 02:31:47 - 201 - Produto deletado com sucesso - Produtos - localhost - http://localhost/desafioWebJump/products.php 
+26-04-2022 02:31:47 - 201 - Produtos silecionados com sucesso - Produtos - localhost - http://localhost/desafioWebJump/products.php 
+26-04-2022 02:33:43 - 201 - Produtos selecionados com sucesso - Produtos - localhost - http://localhost/desafioWebJump/products.php 
+26-04-2022 02:33:54 - 201 - Produto atualizado com sucesso - Produtos - localhost - http://localhost/desafioWebJump/editProduct.php?id=6 
+26-04-2022 02:33:54 - 201 - Produtos selecionados com sucesso - Produtos - localhost - http://localhost/desafioWebJump/editProduct.php?id=6 
+26-04-2022 02:34:53 - 201 - Produto inserido com sucesso - Produtos - localhost - http://localhost/desafioWebJump/addProduct.php 
+26-04-2022 02:34:53 - 201 - Produtos selecionados com sucesso - Produtos - localhost - http://localhost/desafioWebJump/addProduct.php 

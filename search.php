@@ -1,5 +1,5 @@
 <?php
-  include_once "app/controllers/ProdutosController.php";
+  require_once "app/controllers/ProdutosController.php";
   
   use App\Controllers\ProdutosController;
 

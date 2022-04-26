@@ -2,16 +2,20 @@
 
     namespace App\Controllers;
 
-    include_once "app/database/Conexao.php";
+    require_once __DIR__."/../database/Conexao.php";
+    require_once __DIR__."/../database/Log.php";
 
     use App\Database\Conexao;
+    use App\Database\Log;
 
     class CategoriasController 
     {
         public $db;
+        public $log;
         public function __construct()
         {
-            $this->db = new Conexao();
+            $this->db  = new Conexao();
+            $this->log = new Log();
         }
 
         public function insert()
@@ -29,9 +33,16 @@
 
             $result = $stmt->execute();
 
-            if ( ! $result )
-            {
-                var_dump( $stmt->errorInfo() );
+            $this->log->log(201, "Categoria inserida com sucesso", "Categorias");
+            
+            if ( !$result ){
+                $this->log->log(401, "Erro ao inserir Categoria no Banco de Dados", "Categorias");
+                
+                printf("%s", 
+                    [
+                        $stmt->errorInfo()
+                    ]
+                );
                 exit;
             }
 
@@ -54,6 +65,8 @@
                 
                 array_push($valores, $row);
             }
+
+            $this->log->log(200, "Categorias selecionadas", "Categorias");
             
             return $valores;
         }
@@ -72,11 +85,18 @@
                 ':id'     => $id,
             ]);
 
-            if ( ! $result )
-            {
-                var_dump( $stmt->errorInfo() );
+            if ( !$result ){
+                $this->log->log(401, "Erro ao atualizar Categoria no Banco de Dados", "Categorias");
+                
+                printf("%s", 
+                    [
+                        $stmt->errorInfo()
+                    ]
+                );
                 exit;
             }
+
+            $this->log->log(201, "Categoria atualizada com sucesso", "Categorias");
 
             return $result;
         }
@@ -85,15 +105,21 @@
         {
             $pdo = $this->db->db();
             $stmt = $pdo->prepare("DELETE FROM categorias WHERE id = $id");
-            
             $result = $stmt->execute();
             
-            if ( ! $result )
-            {
-                var_dump( $stmt->errorInfo() );
+            if ( !$result ){
+                $this->log->log(401, "Erro ao deletar Categoria no Banco de Dados", "Categorias");
+                
+                printf("%s", 
+                    [
+                        $stmt->errorInfo()
+                    ]
+                );
                 exit;
             }
 
+            $this->log->log(201, "Categoria removida com sucesso", "Categorias");
+            
             return $result;
         }
     }

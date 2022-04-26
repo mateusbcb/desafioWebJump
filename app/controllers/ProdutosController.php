@@ -2,17 +2,21 @@
 
     namespace App\Controllers;
 
-    include_once "app/database/Conexao.php";
+    require_once __DIR__."/../database/Conexao.php";
+    require_once __DIR__."/../database/Log.php";
 
     use App\Database\Conexao;
     use PDO;
+    use App\Database\Log;
 
     class ProdutosController 
     {
         public $db;
+        public $log;
         public function __construct()
         {
-            $this->db = new Conexao();
+            $this->db  = new Conexao();
+            $this->log = new Log();
         }
 
         public function insert()
@@ -89,9 +93,16 @@
 
             $result = $stmt->execute();
 
-            if ( ! $result )
-            {
-                var_dump( $stmt->errorInfo() );
+            $this->log->log(201, "Produto inserido com sucesso", "Produtos");
+
+            if ( !$result ){
+                $this->log->log(401, "Erro ao inserir Produto no Banco de Dados", "Produtos");
+                
+                printf("%s", 
+                    [
+                        $stmt->errorInfo()
+                    ]
+                );
                 exit;
             }
 
@@ -114,6 +125,8 @@
                 
                 array_push($valores, $row);
             }
+
+            $this->log->log(201, "Produtos selecionados com sucesso", "Produtos");
             
             return $valores;
         }
@@ -140,11 +153,18 @@
                 ':id'         => $id,
             ]);
 
-            if ( ! $result )
-            {
-                var_dump( $stmt->errorInfo() );
+            if ( !$result ){
+                $this->log->log(401, "Erro ao atualizar Produto no Banco de Dados", "Produtos");
+                
+                printf("%s", 
+                    [
+                        $stmt->errorInfo()
+                    ]
+                );
                 exit;
             }
+
+            $this->log->log(201, "Produto atualizado com sucesso", "Produtos");
 
             return $result;
         }
@@ -156,11 +176,18 @@
             
             $result = $stmt->execute();
             
-            if ( ! $result )
-            {
-                var_dump( $stmt->errorInfo() );
+            if ( !$result ){
+                $this->log->log(401, "Erro ao deletar Produto no Banco de Dados", "Produtos");
+                
+                printf("%s", 
+                    [
+                        $stmt->errorInfo()
+                    ]
+                );
                 exit;
             }
+            
+            $this->log->log(201, "Produto deletado com sucesso", "Produtos");
 
             return $result;
         }
@@ -181,24 +208,6 @@
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             return $results;
-
-            // $valores = [];
-
-            // $sql = "SELECT * FROM produtos WHERE nome LIKE \'%\'\"pro\"\'%\';";
-
-            // $stmt  = $pdo->prepare( $sql );
-            
-            // $results = $stmt->execute([
-            //     ':nome' => "'%'$busca'%'"
-            // ]);
-            // return $results;
-            
-            // foreach ($pdo->query($sql) as $row) {
-                
-            //     array_push($valores, $row);
-            // }
-            
-            // return $valores;
         }
     }
 
