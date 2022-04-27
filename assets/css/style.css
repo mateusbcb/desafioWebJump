@@ -261,9 +261,9 @@ body {
       height: 200px;
     }
 
-    select.input-text {
+    select .input-text {
       width: 530px;
-      height: 200px;
+      height: 20px;
     }
     .label {
       display: inline-block;
@@ -324,7 +324,7 @@ body {
       width: fit-content;
       padding: 12px 16px;
       border: 1px solid #ccc;
-      border-radius: 12px;
+      /*border-radius: 12px;*/
       background: transparent;
       cursor: pointer;
     }
@@ -337,6 +337,15 @@ body {
     }
     .btn-primary:hover {
       background: #86c5be;
+    }
+
+    .active {
+      background: #86c5be;
+    }
+
+    .desable{
+      cursor: default;
+      color: #a7a7a7;
     }
 
     footer {

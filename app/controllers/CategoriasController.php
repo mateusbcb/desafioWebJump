@@ -49,26 +49,109 @@
             return $result;
         }
 
-        public function select($id = '')
+        public function select($id = '', $paginacao = true, $total_reg = 5)
         {
             $pdo = $this->db->db();
 
-            $valores = [];
+            if ($paginacao == true) {
 
-            if ($id == '') {
-                $sql = "SELECT * FROM categorias";
-            }else {
-                $sql = "SELECT * FROM categorias WHERE id = $id";
-            }
-            
-            foreach ($pdo->query($sql) as $row) {
+                if ( isset($_GET['pagina']) ) {
+                    $pagina = $_GET['pagina'];
+                }else {
+                    $pagina = 1;
+                }
                 
-                array_push($valores, $row);
-            }
+                if(!$pagina) {
+                    $pc = "1";
+                }else {
+                    $pc = $pagina;
+                }
 
-            $this->log->log(200, "Categorias selecionadas", "Categorias");
-            
-            return $valores;
+                $inicio = $pc - 1;
+                $inicio = $inicio * $total_reg;
+
+                if ($id == '') {
+
+                    $limite = $pdo->query("SELECT * FROM categorias LIMIT $inicio,$total_reg");
+                    $todos  = $pdo->query("SELECT * FROM categorias");
+
+                }else {
+
+                    $limite = $pdo->query("SELECT * FROM categorias  WHERE id = $id LIMIT $inicio,$total_reg");
+                    $todos  = $pdo->query("SELECT * FROM categorias  WHERE id = $id");
+
+                }
+
+                $tr = $todos->rowCount($todos); // verifica o número total de registros
+                $tp = $tr / $total_reg; // verifica o número total de páginas
+
+                $anterior = $pc -1;
+                $proximo = $pc +1;
+
+                if ($pc > 1) {
+                    $pagina_anterior = $anterior;
+                }else {
+                    $pagina_anterior = null;
+                }
+
+                if ($pc < $tp) {
+                    $pagina_proxima = $proximo;
+                }else {
+                    $pagina_proxima = null;
+                }
+
+                $valores_paginado = [];
+                $paginas = [];
+
+                foreach ($limite as $key => $value) {
+                    array_push($valores_paginado, $value);
+                    array_push($paginas, $key);
+                }
+
+                $paginacao_array = [
+                    'results' => $valores_paginado,
+                    'total_registros' => $tr,
+                    'total_paginas' => $tp,
+                    'pagina_anterior' => $pagina_anterior,
+                    'pagina_proxima' => $pagina_proxima,
+                    'paginas' => $paginas,
+                    'pagina_atual' => $pc,
+                ];
+
+                $this->log->log(200, "Categorias selecionadas", "Categorias");
+
+                return $paginacao_array;
+            }else {
+                
+                $valores = [];
+                $paginas = [];
+    
+                if ($id == '') {
+                    $sql = "SELECT * FROM categorias";
+                }else {
+                    $sql = "SELECT * FROM categorias WHERE id = $id";
+                }
+                
+                foreach ($pdo->query($sql) as $key => $row) {
+                    
+                    array_push($valores, $row);
+                    array_push($paginas, $key);
+                }
+
+                $paginacao_array = [
+                    'results' => $valores,
+                    'total_registros' => 0,
+                    'total_paginas' => 0,
+                    'pagina_anterior' => 0,
+                    'pagina_proxima' => 0,
+                    'paginas' => $paginas,
+                    'pagina_atual' => 0,
+                ];
+
+                $this->log->log(200, "Categorias selecionadas", "Categorias");
+                
+                return $paginacao_array;
+            }
         }
 
         public function update($id)

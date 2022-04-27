@@ -5,7 +5,13 @@
 
   $categorias = new CategoriasController();
 
-  $categoriasArr = $categorias->select();
+  if ( isset($_GET['itens_pagina']) ) {
+    $itens_pagina = $_GET['itens_pagina'];
+  }else {
+    $itens_pagina = 5;
+  }
+
+  $categoriasArr = $categorias->select('', true, $itens_pagina);
 ?>
 
 <!doctype html>
@@ -52,6 +58,22 @@
       <h1 class="title">Categories</h1>
       <a href="addCategory.php" class="btn-action">Add new Category</a>
     </div>
+    <div class="filter">
+      <form action="categories.php" method="GET">
+        <div class="input-field">
+          <label for="itens_pagina" class="label">
+            Itens Por página
+          </label>
+          <select name="itens_pagina" id="itens_pagina" class="input-text" style="width: 100px;">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+          </select>
+          <input type="submit" value="Enviar" class="btn btn-primary">
+        </div>
+      </form>
+    </div>
     <table class="data-grid">
       <tr class="data-row">
         <th class="data-grid-th">
@@ -65,10 +87,10 @@
         </th>
       </tr>
       <?php
-        foreach ($categoriasArr as $key => $categoria) {
+        foreach ($categoriasArr['results'] as $key => $categoria) {
           echo "
           <tr class='data-row'>
-            <td class='data-grid-td'>
+            <td class='data-grid-td' style='width: 80%;'>
               <span class='data-grid-cell-content'>".$categoria['nome']."</span>
             </td>
           
@@ -77,15 +99,15 @@
             </td>
           
             <td class='data-grid-td'>
-              <div class='actions'>
+              <div class='actions' style='display: flex;'>
                 <form action='editCategory.php?id=".$categoria['id']."' method='GET'>
                   <input type='hidden' name='id' value='".$categoria['id']."'>
-                  <input type='submit' class='action edit' value='Editar'>
+                  <input type='submit' class='action edit btn' value='Editar'>
                 </form>
 
                 <form action='routes/excluirCategoria.php' method='POST'>
                   <input type='hidden' name='id' value='".$categoria['id']."'>
-                  <input type='submit' class='action delete' value='Delete'>
+                  <input type='submit' class='action delete btn' value='Delete'>
                 </form>
               </div>
             </td>
@@ -94,6 +116,29 @@
         }
       ?>
     </table>
+    <div class="pagination">
+      <?php
+        if ($categoriasArr['pagina_anterior'] != null) {
+          echo "<a href='http://localhost/desafioWebJump/categories.php?itens_pagina=$itens_pagina&pagina=".$categoriasArr['pagina_anterior']."' class='btn'>Anterior</a>";
+        }else {
+          echo "<a class='btn desable'>Anterior</a>";
+        }
+
+        if ($categoriasArr['total_paginas'] > 1) {
+          foreach ($categoriasArr['paginas'] as $key => $pagina) {
+            if ($pagina > 0) {
+              echo "<a href='http://localhost/desafioWebJump/categories.php?itens_pagina=$itens_pagina&pagina=$pagina' class='"; if ($pagina == $categoriasArr['pagina_atual']) { echo 'btn btn-primary active'; }else{ echo 'btn btn-primary';} echo "'>$pagina</a>";
+            }
+          }
+        }
+
+        if ($categoriasArr['pagina_proxima'] != null) {
+          echo "<a href='http://localhost/desafioWebJump/categories.php?itens_pagina=$itens_pagina&pagina=".$categoriasArr['pagina_proxima']."' class='btn'>Próxima</a>";
+        }else {
+          echo "<a class='btn desable'>Próxima</a>";
+        }
+      ?>
+    </div>
   </main>
   <!-- Main Content -->
 

@@ -11,7 +11,7 @@
 
             $arquivo = __DIR__.'/../Logs/Logs_'.$tipo.'.txt';
 
-            $referencia = $_SERVER['HTTP_REFERER'];
+            $referencia = $_SERVER['SERVER_NAME'];
             $host = $_SERVER['HTTP_HOST'];
 
             $log = "$data - $codigo - $msg - $tipo - $host - $referencia ".PHP_EOL;
